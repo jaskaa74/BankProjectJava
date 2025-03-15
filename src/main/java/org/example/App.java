@@ -62,14 +62,15 @@ public class App {
         List<Double> investments = new ArrayList<>();
         int choice = 0;
 
-        while (choice != 7) {
+        while (choice != 8) {
             System.out.println("\n1 - Deposito");
             System.out.println("2 - Prelievo");
             System.out.println("3 - Investimento");
             System.out.println("4 - Avanza nel tempo");
             System.out.println("5 - Stato conto");
             System.out.println("6 - Stato portafoglio");
-            System.out.println("7 - Logout");
+            System.out.println("7 - Visualizza storico delle transazioni");
+            System.out.println("8 - Logout");
             System.out.print("Scelta: ");
             choice = scanner.nextInt();
 
@@ -103,6 +104,9 @@ public class App {
                     currentUser.printWallet();
                     break;
                 case 7:
+                    currentUser.printTransactionHistory();
+                    break;
+                case 8:
                     System.out.println("Logout effettuato.");
                     return;
                 default:
@@ -111,3 +115,4 @@ public class App {
         }
     }
 }
+

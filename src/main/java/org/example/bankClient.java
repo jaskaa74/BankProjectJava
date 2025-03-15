@@ -8,12 +8,14 @@ public class bankClient implements Serializable {
     private String password;
     private double balance;
     private double wallet;
+    private List<Transaction> transactionHistory;
 
     public bankClient(String username, String password, double balance, double wallet) {
         this.username = username;
         this.password = password;
         this.balance = balance;
         this.wallet = wallet;
+        this.transactionHistory = new ArrayList<>();
     }
 
     public String getPassword() {
@@ -60,6 +62,7 @@ public class bankClient implements Serializable {
             wallet -= moneyToDeposit;
         }
         balance += moneyToDeposit;
+        addTransaction("Deposito", moneyToDeposit, "Deposito di denaro.");
     }
 
     public void withdraw(double moneyToTake) {
@@ -74,6 +77,7 @@ public class bankClient implements Serializable {
         }
         wallet += moneyToTake;
         balance -= moneyToTake;
+        addTransaction("Prelievo", moneyToTake, "Prelievo di denaro.");
     }
 
     public List<Double> shortInvestiment(List<Double> finalResults) {
@@ -103,6 +107,7 @@ public class bankClient implements Serializable {
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
         }
+        addTransaction("Investimento Breve", moneyToInvest, "Investimento a breve durata.");
         return finalResults;
     }
 
@@ -132,6 +137,7 @@ public class bankClient implements Serializable {
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
         }
+        addTransaction("Investimento medio", moneyToInvest, "Investimento a media durata.");
         return finalResults;
     }
 
@@ -161,6 +167,7 @@ public class bankClient implements Serializable {
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
         }
+        addTransaction("Investimento lungo", moneyToInvest, "Investimento a lunga durata.");
         return finalResults;
     }
 
@@ -200,5 +207,21 @@ public class bankClient implements Serializable {
             balance += investimentsV.get(JumpM - 1);
         }
         printStatus();
+    }
+
+    public void addTransaction(String type, double amount, String description) {
+        Transaction transaction = new Transaction(type, amount, description);
+        transactionHistory.add(transaction);
+    }
+
+    public void printTransactionHistory() {
+        if (transactionHistory.isEmpty()) {
+            System.out.println("Nessuna transazione disponibile.");
+            return;
+        }
+        System.out.println("Storico delle transazioni:");
+        for (Transaction transaction : transactionHistory) {
+            System.out.println(transaction);
+        }
     }
 }

@@ -22,6 +22,7 @@ alla chiusura e riprendere da dove si era rimasti;
 • Inserimento degli unit test;
 
 L’utilizzo di librerie non solo e’ possibile, ma anche fortemente consigliato.
+
 IMPORTANTI RACCOMANDAZIONI
 1. Il linguaggio di programmazione da usare obbligatoriamente Java.
 

@@ -1,8 +1,8 @@
 package org.example;
+
 import java.util.*;
 
-public class App
-{
+public class App {
     public static void waitForSendKey() {
         System.out.println("\nPremi Invio per tornare al menu principale.");
         Scanner scanner = new Scanner(System.in);
@@ -11,10 +11,42 @@ public class App
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        bankClient firstClient = new bankClient("Giovanni");
-        int choice = 0;
+        UserManager userManager = new UserManager();
+        bankClient currentUser = null; // Utente loggato
         List<Double> investimentsV = new ArrayList<>();
 
+        // Autenticazione utente
+        while (currentUser == null) {
+            System.out.println("\nBenvenuto! Seleziona un'opzione:");
+            System.out.println("1 - Registrati");
+            System.out.println("2 - Accedi");
+            System.out.println("3 - Esci");
+
+            int authChoice = scanner.nextInt();
+            scanner.nextLine(); // Pulisce il buffer
+
+            if (authChoice == 1) {
+                System.out.print("Inserisci username: ");
+                String username = scanner.nextLine();
+                System.out.print("Inserisci password: ");
+                String password = scanner.nextLine();
+                userManager.registerUser(username, password);
+            } else if (authChoice == 2) {
+                System.out.print("Inserisci username: ");
+                String username = scanner.nextLine();
+                System.out.print("Inserisci password: ");
+                String password = scanner.nextLine();
+                currentUser = userManager.loginUser(username, password);
+            } else if (authChoice == 3) {
+                System.out.println("Uscita...");
+                scanner.close();
+                return;
+            } else {
+                System.out.println("Scelta non valida.");
+            }
+        }
+
+        int choice = 0;
         while (choice != 7) {
             System.out.println("\nCosa vuoi fare?:");
             System.out.println("1 - Deposito");
@@ -23,45 +55,45 @@ public class App
             System.out.println("4 - Avanza nel tempo");
             System.out.println("5 - Visualizza lo stato del tuo conto");
             System.out.println("6 - Visualizza lo stato del tuo portafoglio");
-            System.out.println("7 - Chiudi applicazione\n");
+            System.out.println("7 - Esci");
 
             choice = scanner.nextInt();
 
             switch (choice) {
                 case 1:
-                    System.out.println("Inserisci la somma da depositare");
-                    System.out.println("ATTENZIONE: SE LA CIFRA È SUPERIORE A QUELLA DEL PORTAFOGLIO LA DIFFERENZA NON VERRÀ DEPOSITATA");
-                    System.out.println("SE IL CONTO È IN NEGATIVO VERRÀ UTILIZZATA PER RISANARE IL DEBITO");
+                    System.out.println("Inserisci la somma da depositare:");
                     double depositSum = scanner.nextDouble();
-                    firstClient.deposit(depositSum);
+                    currentUser.deposit(depositSum);
                     break;
                 case 2:
-                    System.out.println("Inserisci la somma da prelevare");
-                    System.out.println("ATTENZIONE: SE IL CONTO È IN NEGATIVO NON SARÀ POSSIBILE PRELEVARE");
+                    System.out.println("Inserisci la somma da prelevare:");
                     double takeSum = scanner.nextDouble();
-                    firstClient.takeMoney(takeSum);
+                    currentUser.withdraw(takeSum);
                     break;
                 case 3:
-                    investimentsV = firstClient.invest();
+                    investimentsV = currentUser.invest();
                     break;
                 case 4:
                     System.out.println("Di quanti mesi vuoi avanzare?");
                     int JumpMonths = scanner.nextInt();
-                    firstClient.JumpMoths(investimentsV, JumpMonths);
+                    currentUser.JumpMoths(investimentsV, JumpMonths);
                     break;
                 case 5:
-                    firstClient.printStatus();
+                    currentUser.printStatus();
                     break;
                 case 6:
-                    firstClient.printWallet();
+                    currentUser.printWallet();
                     break;
                 case 7:
+                    System.out.println("Uscita...");
                     scanner.close();
                     return;
                 default:
-                    break;
+                    System.out.println("Scelta non valida.");
             }
+            waitForSendKey();
         }
         scanner.close();
     }
 }
+

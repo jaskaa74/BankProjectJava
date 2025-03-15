@@ -1,21 +1,32 @@
 package org.example;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class bankClient {
-    private String name;
+public class bankClient implements Serializable {
+    private String username;
+    private String password;
     private double balance;
     private double wallet;
 
-    public bankClient(String name, double balance, double wallet) {
-        this.name = name;
+    public bankClient(String username, String password, double balance, double wallet) {
+        this.username = username;
+        this.password = password;
         this.balance = balance;
         this.wallet = wallet;
     }
 
-    public bankClient(String name) {
-        this(name, 0, 100);
+    public bankClient(String username, String password) {
+        this(username, password, 0, 100);
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public boolean checkPassword(String inputPassword) {
+        return this.password.equals(inputPassword);
+    }
 
     public void printBalance() {
         System.out.println(balance);
@@ -26,7 +37,7 @@ public class bankClient {
     }
 
     public void printStatus() {
-        System.out.println("Stato utente:\nNome utente: " + name + "\nConto: " + balance);
+        System.out.println("Stato utente:\nNome utente: " + username + "\nConto: " + balance);
     }
 
     public void deposit(double moneyToDeposit) {
@@ -43,7 +54,7 @@ public class bankClient {
         balance += moneyToDeposit;
     }
 
-    public void takeMoney(double moneyToTake) {
+    public void withdraw(double moneyToTake) {
         if (balance <= 0) {
             System.out.println("Conto vuoto");
             return;

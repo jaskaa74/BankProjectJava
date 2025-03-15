@@ -16,8 +16,16 @@ public class bankClient implements Serializable {
         this.wallet = wallet;
     }
 
-    public bankClient(String username, String password) {
-        this(username, password, 0, 100);
+    public String getPassword() {
+        return password;
+    }
+
+    public double getWallet() {
+        return wallet;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     public String getUsername() {
@@ -33,7 +41,7 @@ public class bankClient implements Serializable {
     }
 
     public void printWallet() {
-        System.out.println(wallet);
+        System.out.println("Portafoglio: " + wallet);
     }
 
     public void printStatus() {
@@ -155,7 +163,6 @@ public class bankClient implements Serializable {
         }
         return finalResults;
     }
-
 
     public List<Double> invest() {
         Scanner scanner = new Scanner(System.in);

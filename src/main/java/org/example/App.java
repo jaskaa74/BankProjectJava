@@ -12,90 +12,102 @@ public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         UserManager userManager = new UserManager();
+        bankClient currentUser = null;
 
         while (true) {
-            bankClient currentUser = null;
+            System.out.println("\n1 - Registrati");
+            System.out.println("2 - Accedi");
+            System.out.println("3 - Elimina account");
+            System.out.println("4 - Esci");
+            System.out.print("Scelta: ");
+            int authChoice = scanner.nextInt();
+            scanner.nextLine();
 
-            while (currentUser == null) {
-                System.out.println("\nBenvenuto! Seleziona un'opzione:");
-                System.out.println("1 - Registrati");
-                System.out.println("2 - Accedi");
-                System.out.println("3 - Esci");
-
-                int authChoice = scanner.nextInt();
-                scanner.nextLine();
-
-                if (authChoice == 1) {
-                    System.out.print("Inserisci username: ");
-                    String username = scanner.nextLine();
-                    System.out.print("Inserisci password: ");
-                    String password = scanner.nextLine();
-                    userManager.registerUser(username, password);
-                } else if (authChoice == 2) {
-                    System.out.print("Inserisci username: ");
-                    String username = scanner.nextLine();
-                    System.out.print("Inserisci password: ");
-                    String password = scanner.nextLine();
-                    currentUser = userManager.loginUser(username, password);
-                } else if (authChoice == 3) {
-                    System.out.println("Uscita...");
-                    scanner.close();
-                    return;
-                } else {
-                    System.out.println("Scelta non valida.");
-                }
+            if (authChoice == 4) {
+                System.out.println("Uscita dal programma...");
+                break;
             }
 
-            List<Double> investimentsV = new ArrayList<>();
-            int choice = 0;
-            while (choice != 7) {
-                System.out.println("\nCosa vuoi fare?:");
-                System.out.println("1 - Deposito");
-                System.out.println("2 - Prelievo");
-                System.out.println("3 - Investimento");
-                System.out.println("4 - Avanza nel tempo");
-                System.out.println("5 - Visualizza lo stato del tuo conto");
-                System.out.println("6 - Visualizza lo stato del tuo portafoglio");
-                System.out.println("7 - Disconnetti utente");
+            System.out.print("Inserisci username: ");
+            String username = scanner.nextLine();
 
-                choice = scanner.nextInt();
+            if (authChoice == 3) {
+                System.out.print("Inserisci la tua password per confermare l'eliminazione: ");
+                String password = scanner.nextLine();
 
-                switch (choice) {
-                    case 1:
-                        System.out.println("Inserisci la somma da depositare:");
-                        double depositSum = scanner.nextDouble();
-                        currentUser.deposit(depositSum);
-                        break;
-                    case 2:
-                        System.out.println("Inserisci la somma da prelevare:");
-                        double takeSum = scanner.nextDouble();
-                        currentUser.withdraw(takeSum);
-                        break;
-                    case 3:
-                        investimentsV = currentUser.invest();
-                        break;
-                    case 4:
-                        System.out.println("Di quanti mesi vuoi avanzare?");
-                        int JumpMonths = scanner.nextInt();
-                        currentUser.JumpMoths(investimentsV, JumpMonths);
-                        break;
-                    case 5:
-                        currentUser.printStatus();
-                        break;
-                    case 6:
-                        currentUser.printWallet();
-                        break;
-                    case 7:
-                        System.out.println("Disconnessione in corso...");
-                        currentUser = null; // Reset dell'utente
-                        break;
-                    default:
-                        System.out.println("Scelta non valida.");
+                if (userManager.deleteUser(username, password)) {
+                    System.out.println("Account eliminato con successo.");
+                } else {
+                    System.out.println("Password errata. Eliminazione annullata.");
                 }
-                waitForSendKey();
+                continue;
+            }
+
+            System.out.print("Inserisci password: ");
+            String password = scanner.nextLine();
+
+            if (authChoice == 1) {
+                userManager.registerUser(username, password);
+            } else if (authChoice == 2) {
+                currentUser = userManager.loginUser(username, password);
+                if (currentUser != null) {
+                    userMenu(scanner, userManager, currentUser);
+                }
+            }
+        }
+        scanner.close();
+    }
+
+    public static void userMenu(Scanner scanner, UserManager userManager, bankClient currentUser) {
+        List<Double> investments = new ArrayList<>();
+        int choice = 0;
+
+        while (choice != 7) {
+            System.out.println("\n1 - Deposito");
+            System.out.println("2 - Prelievo");
+            System.out.println("3 - Investimento");
+            System.out.println("4 - Avanza nel tempo");
+            System.out.println("5 - Stato conto");
+            System.out.println("6 - Stato portafoglio");
+            System.out.println("7 - Logout");
+            System.out.print("Scelta: ");
+            choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Inserisci la somma da depositare: ");
+                    double depositSum = scanner.nextDouble();
+                    currentUser.deposit(depositSum);
+                    userManager.saveUserData();
+                    break;
+                case 2:
+                    System.out.print("Inserisci la somma da prelevare: ");
+                    double takeSum = scanner.nextDouble();
+                    currentUser.withdraw(takeSum);
+                    userManager.saveUserData();
+                    break;
+                case 3:
+                    investments = currentUser.invest();
+                    userManager.saveUserData();
+                    break;
+                case 4:
+                    System.out.print("Di quanti mesi vuoi avanzare? ");
+                    int jumpMonths = scanner.nextInt();
+                    currentUser.JumpMoths(investments, jumpMonths);
+                    userManager.saveUserData();
+                    break;
+                case 5:
+                    currentUser.printStatus();
+                    break;
+                case 6:
+                    currentUser.printWallet();
+                    break;
+                case 7:
+                    System.out.println("Logout effettuato.");
+                    return;
+                default:
+                    System.out.println("Scelta non valida.");
             }
         }
     }
 }
-
-

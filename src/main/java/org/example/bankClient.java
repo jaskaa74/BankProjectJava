@@ -44,9 +44,6 @@ public class bankClient implements Serializable {
     }
 
     public void deposit(double moneyToDeposit) {
-        if (balance < 0) {
-            balance += moneyToDeposit;
-        }
         if (wallet < moneyToDeposit) {
             System.out.println("Solo " + wallet + " euro sono stati depositati");
             moneyToDeposit = wallet;
@@ -276,5 +273,9 @@ public class bankClient implements Serializable {
         for (Transaction transaction : transactionHistory) {
             System.out.println(transaction);
         }
+    }
+
+    public List<Transaction> getTransactionHistory() {
+        return transactionHistory;
     }
 }

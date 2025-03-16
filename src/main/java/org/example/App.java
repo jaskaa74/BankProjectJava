@@ -15,6 +15,7 @@ public class App {
         bankClient currentUser = null;
 
         while (true) {
+            System.out.println("Se ti sei Registrato, Accedi!");
             System.out.println("\n1 - Registrati");
             System.out.println("2 - Accedi");
             System.out.println("3 - Elimina account");

@@ -18,13 +18,11 @@ public class UserManager {
             return;
         }
         users.put(username, new bankClient(username, password, 0.0, 100.0));
-        System.out.println("Registrazione avvenuta con successo!");
     }
 
     public bankClient loginUser(String username, String password) {
         bankClient user = users.get(username);
         if (user != null && user.checkPassword(password)) {
-            System.out.println("Login effettuato con successo!");
             return users.get(username);
         }
         System.out.println("Errore: Credenziali non valide.");

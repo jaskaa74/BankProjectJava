@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Transaction implements Serializable {
-    private String type;
-    private double amount;
-    private Date date;
-    private String description;
+    String type;
+    double amount;
+    Date date;
+    String description;
 
     public Transaction(String type, double amount, String description) {
         this.type = type;
@@ -20,5 +20,20 @@ public class Transaction implements Serializable {
     public String toString() {
         return "Data: " + date.toString() + "\nTipo: " + type + "\nImporto: " + amount + "€\nDescrizione: " + description + "\n";
     }
-}
 
+    public String getType() {
+        return type;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+}

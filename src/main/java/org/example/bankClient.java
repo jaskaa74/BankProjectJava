@@ -4,11 +4,11 @@ import java.io.Serializable;
 import java.util.*;
 
 public class bankClient implements Serializable {
-    private String username;
-    private String password;
-    private double balance;
-    private double wallet;
-    private List<Transaction> transactionHistory;
+    String username;
+    String password;
+    double balance;
+    double wallet;
+    List<Transaction> transactionHistory;
 
     public bankClient(String username, String password, double balance, double wallet) {
         this.username = username;
@@ -38,16 +38,13 @@ public class bankClient implements Serializable {
         return this.password.equals(inputPassword);
     }
 
-    public void printBalance() {
-        System.out.println(balance);
+    public List<Transaction> getTransactionHistory() {
+        return transactionHistory;
     }
 
-    public void printWallet() {
-        System.out.println("Portafoglio: " + wallet);
-    }
-
-    public void printStatus() {
-        System.out.println("Stato utente:\nNome utente: " + username + "\nConto: " + balance);
+    public void addTransaction(String type, double amount, String description, Date date) {
+        Transaction transaction = new Transaction(type, amount, description);
+        transactionHistory.add(transaction);
     }
 
     public void deposit(double moneyToDeposit) {
@@ -62,7 +59,7 @@ public class bankClient implements Serializable {
             wallet -= moneyToDeposit;
         }
         balance += moneyToDeposit;
-        addTransaction("Deposito", moneyToDeposit, "Deposito di denaro.");
+        addTransaction("Deposito", moneyToDeposit, "Deposito di denaro", new Date());
     }
 
     public void withdraw(double moneyToTake) {
@@ -77,7 +74,19 @@ public class bankClient implements Serializable {
         }
         wallet += moneyToTake;
         balance -= moneyToTake;
-        addTransaction("Prelievo", moneyToTake, "Prelievo di denaro.");
+        addTransaction("Prelievo", moneyToTake, "Prelievo di denaro", new Date());
+    }
+
+    public void printBalance() {
+        System.out.println(balance);
+    }
+
+    public void printWallet() {
+        System.out.println("Portafoglio: " + wallet);
+    }
+
+    public void printStatus() {
+        System.out.println("\nNome utente: " + username + "\nConto: " + balance);
     }
 
     public List<Double> shortInvestiment(List<Double> finalResults) {
@@ -107,7 +116,7 @@ public class bankClient implements Serializable {
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
         }
-        addTransaction("Investimento Breve", moneyToInvest, "Investimento a breve durata.");
+        addTransaction("Investimento Breve", moneyToInvest, "Investimento a breve durata.", new Date());
         return finalResults;
     }
 
@@ -137,7 +146,7 @@ public class bankClient implements Serializable {
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
         }
-        addTransaction("Investimento medio", moneyToInvest, "Investimento a media durata.");
+        addTransaction("Investimento medio", moneyToInvest, "Investimento a media durata.", new Date());
         return finalResults;
     }
 
@@ -167,7 +176,7 @@ public class bankClient implements Serializable {
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
         }
-        addTransaction("Investimento lungo", moneyToInvest, "Investimento a lunga durata.");
+        addTransaction("Investimento lungo", moneyToInvest, "Investimento a lunga durata.", new Date());
         return finalResults;
     }
 
@@ -207,11 +216,6 @@ public class bankClient implements Serializable {
             balance += investimentsV.get(JumpM - 1);
         }
         printStatus();
-    }
-
-    public void addTransaction(String type, double amount, String description) {
-        Transaction transaction = new Transaction(type, amount, description);
-        transactionHistory.add(transaction);
     }
 
     public void printTransactionHistory() {

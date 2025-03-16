@@ -4,8 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class UserManager {
-    private static final String FILE_PATH = "users.txt";
-    private Map<String, bankClient> users;
+    private static final String FILE_PATH = "src/main/resources/users.txt";
+    private final Map<String, bankClient> users;
 
     public UserManager() {
         users = new HashMap<>();
@@ -18,7 +18,6 @@ public class UserManager {
             return;
         }
         users.put(username, new bankClient(username, password, 0.0, 100.0));
-        saveUsers();
         System.out.println("Registrazione avvenuta con successo!");
     }
 
@@ -26,7 +25,7 @@ public class UserManager {
         bankClient user = users.get(username);
         if (user != null && user.checkPassword(password)) {
             System.out.println("Login effettuato con successo!");
-            return user;
+            return users.get(username);
         }
         System.out.println("Errore: Credenziali non valide.");
         return null;
@@ -50,14 +49,28 @@ public class UserManager {
     }
 
     private void saveUsers() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            for (Map.Entry<String, bankClient> entry : users.entrySet()) {
-                bankClient user = entry.getValue();
-                writer.write(user.getUsername() + "," + user.getPassword() + "," + user.getBalance() + "," + user.getWallet());
-                writer.newLine();
+        File file = new File(FILE_PATH);
+
+        if(!file.exists()){
+            try{
+                System.out.println(file.createNewFile());
+            }catch(Exception e){
+                System.out.println("ERROR");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file.getPath(), false))) {
+            for(Map.Entry<String, bankClient> user : users.entrySet()){
+                String temp = "";
+                bw.write(user.getValue().getUsername() + ";" + user.getValue().getPassword() + ";" + user.getValue().getBalance() + ";" + user.getValue().getWallet() + ";");
+                for(Transaction transaction : user.getValue().transactionHistory){
+                    temp = transaction.date.toString() + "," + transaction.type +  "," + Double.toString(transaction.amount) + "," + transaction.description;
+                    bw.write(temp + ";");
+                }
+                bw.write("\n");
+            }
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -67,25 +80,48 @@ public class UserManager {
 
     private void loadUsers() {
         File file = new File(FILE_PATH);
-        if (!file.exists()) {
-            return;
-        }
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
-                if (parts.length == 4) {
-                    String username = parts[0];
-                    String password = parts[1];
-                    double balance = Double.parseDouble(parts[2]);
-                    double wallet = Double.parseDouble(parts[3]);
-                    users.put(username, new bankClient(username, password, balance, wallet));
+        if(!file.exists()){
+            System.out.println("ERROR");
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(file.getPath()))) {
+            String line = "";
+            while((line = br.readLine()) != null){
+                String[] lineParts = line.split(";");
+                registerUser(lineParts[0], lineParts[1]);
+                bankClient currentUser = loginUser(lineParts[0], lineParts[1]);
+                currentUser.balance = Double.parseDouble(lineParts[2]);
+                currentUser.wallet = Double.parseDouble(lineParts[3]);
+                if(lineParts.length > 3){
+                    for(int i = 4; i < lineParts.length ; i++){
+                        String[] transactionParts = lineParts[i].split(",");
+                        String tempType = transactionParts[1];
+                        double amount = Double.parseDouble(transactionParts[2]);
+                        String description = transactionParts[3];
+                        String[] time = transactionParts[0].split(" ");
+                        String[] months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+                        int month = 0;
+                        for(int c = 0; c < months.length ; c++){
+                            if(months[c].equals(time[1])){
+                                month = c+1;
+                                break;
+                            }
+                        }
+                        Date tempDate = new Date();
+                        tempDate.setMonth(month);
+                        tempDate.setDate(Integer.parseInt(time[2]));
+                        tempDate.setYear(Integer.parseInt(time[5]));
+                        String[] tempTime = time[3].split(":");
+                        tempDate.setHours(Integer.parseInt(tempTime[0]));
+                        tempDate.setMinutes(Integer.parseInt(tempTime[1]));
+                        tempDate.setSeconds(Integer.parseInt(tempTime[2]));
+                        loginUser(lineParts[0], lineParts[1]).addTransaction(tempType, amount, description, tempDate);
+                    }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
         }
+
     }
 }
-

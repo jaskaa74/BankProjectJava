@@ -79,23 +79,19 @@ public class App {
                     System.out.print("Inserisci la somma da depositare: ");
                     double depositSum = scanner.nextDouble();
                     currentUser.deposit(depositSum);
-                    userManager.saveUserData();
                     break;
                 case 2:
                     System.out.print("Inserisci la somma da prelevare: ");
                     double takeSum = scanner.nextDouble();
                     currentUser.withdraw(takeSum);
-                    userManager.saveUserData();
                     break;
                 case 3:
                     investments = currentUser.invest();
-                    userManager.saveUserData();
                     break;
                 case 4:
                     System.out.print("Di quanti mesi vuoi avanzare? ");
                     int jumpMonths = scanner.nextInt();
                     currentUser.JumpMoths(investments, jumpMonths);
-                    userManager.saveUserData();
                     break;
                 case 5:
                     currentUser.printStatus();
@@ -108,11 +104,14 @@ public class App {
                     break;
                 case 8:
                     System.out.println("Logout effettuato.");
+                    userManager.saveUserData();
                     return;
                 default:
                     System.out.println("Scelta non valida.");
             }
         }
+
+
     }
 }
 

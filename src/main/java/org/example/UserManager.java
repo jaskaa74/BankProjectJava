@@ -58,7 +58,6 @@ public class UserManager {
                 System.out.println("ERROR");
             }
         }
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file.getPath(), false))) {
             for(Map.Entry<String, bankClient> user : users.entrySet()){
                 String temp = "";
@@ -122,6 +121,5 @@ public class UserManager {
         }catch(Exception e) {
             System.out.println(e.getMessage());
         }
-
     }
 }

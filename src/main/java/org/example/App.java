@@ -110,8 +110,5 @@ public class App {
                     System.out.println("Scelta non valida.");
             }
         }
-
-
     }
 }
-

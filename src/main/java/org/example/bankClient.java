@@ -38,10 +38,6 @@ public class bankClient implements Serializable {
         return this.password.equals(inputPassword);
     }
 
-    public List<Transaction> getTransactionHistory() {
-        return transactionHistory;
-    }
-
     public void addTransaction(String type, double amount, String description, Date date) {
         Transaction transaction = new Transaction(type, amount, description);
         transactionHistory.add(transaction);
@@ -141,7 +137,7 @@ public class bankClient implements Serializable {
             balance -= moneyToInvest;
         }
 
-        for (int duration = 0; duration < 4; duration++) { // 4 anni
+        for (int duration = 0; duration < 4; duration++) {
             int controlInvestiment = rand.nextInt(10);
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
@@ -153,11 +149,11 @@ public class bankClient implements Serializable {
     public List<Double> longInvestiment(List<Double> finalResults) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Investimento a lungo termine (10 anni)");
-
         double[] winnings = {0.5, 0.6, 0.7, 0.8, 1.0, 1.2, 1.5, 1.7, 2.0, 2.5};
-        Random rand = new Random();
-        double moneyToInvest;
 
+        Random rand = new Random();
+
+        double moneyToInvest;
         System.out.print("Soldi disponibili: ");
         printBalance();
         System.out.println("Quanto vuoi investire?");
@@ -170,8 +166,7 @@ public class bankClient implements Serializable {
         } else {
             balance -= moneyToInvest;
         }
-
-        for (int duration = 0; duration < 10; duration++) { // 10 anni
+        for (int duration = 0; duration < 10; duration++) {
             int controlInvestiment = rand.nextInt(10);
             moneyToInvest *= winnings[controlInvestiment];
             finalResults.add(moneyToInvest);
@@ -185,7 +180,6 @@ public class bankClient implements Serializable {
         List<Double> finalResults = new ArrayList<>();
         System.out.println("1 - Investimento breve durata (12 mesi)\n2 - Investimento media durata (4 anni)\n3 - Investimento lunga durata (10 anni)");
         int choice = scanner.nextInt();
-
         switch (choice) {
             case 1:
                 shortInvestiment(finalResults);

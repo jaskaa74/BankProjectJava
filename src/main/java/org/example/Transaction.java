@@ -20,20 +20,4 @@ public class Transaction implements Serializable {
     public String toString() {
         return "Data: " + date.toString() + "\nTipo: " + type + "\nImporto: " + amount + "€\nDescrizione: " + description + "\n";
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Date getDate() {
-        return date;
-    }
 }

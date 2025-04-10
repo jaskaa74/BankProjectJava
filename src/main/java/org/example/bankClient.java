@@ -82,173 +82,97 @@ public class bankClient implements Serializable {
         System.out.println("\nNome utente: " + username + "\nConto: " + balance);
     }
 
-    public List<Double> shortInvestiment(List<Double> finalResults) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Scelta:\n1-Investimento di basso rischio e basso guadagno\n2-Investimento di medio rischio e medio guadagno\n3-Investimento di alto rischio e alto guadagno");
-        int choice = scanner.nextInt();
-
-        double[] winnings;
-        switch (choice) {
-            case 1:
-                winnings = new double[]{0.9, 0.95, 1.0, 1.05, 1.1, 1.1, 1.1, 1.1, 1.15, 1.15};
-                break;
-            case 2:
-                winnings = new double[]{0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.1, 1.15, 1.2, 1.25};
-                break;
-            case 3:
-                winnings = new double[]{0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6};
-                break;
-            default:
-                System.out.println("Scelta non valida. Verrà selezionato l'investimento a medio rischio.");
-                winnings = new double[]{0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.1, 1.15, 1.2, 1.25};
-        }
-
-        Random rand = new Random();
-        double moneyToInvest;
-
-        System.out.print("Soldi disponibili: ");
-        printBalance();
-        System.out.println("Quanto vuoi investire?");
-        moneyToInvest = scanner.nextDouble();
-        addTransaction("Investimento Breve", moneyToInvest, "Investimento a breve durata.", new Date());
-
-        if (moneyToInvest > balance) {
-            System.out.println((moneyToInvest - balance) + " euro non sono stati investiti");
-            moneyToInvest = balance;
-            balance = 0;
-        } else {
-            balance -= moneyToInvest;
-        }
-
-        for (int duration = 0; duration < 12; duration++) {
-            int controlInvestiment = rand.nextInt(10);
-            moneyToInvest *= winnings[controlInvestiment];
-            finalResults.add(moneyToInvest);
-        }
-
-        return finalResults;
-    }
-
-
-    public List<Double> mediumInvestiment(List<Double> finalResults) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Investimento a medio termine (4 anni)");
-        System.out.println("Scelta:\n1-Investimento di basso rischio e basso guadagno\n2-Investimento di medio rischio e medio guadagno\n3-Investimento di alto rischio e alto guadagno");
-        int choice = scanner.nextInt();
-
-        double[] winnings;
-        switch (choice) {
-            case 1:
-                winnings = new double[]{0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.05, 1.1, 1.1, 1.15};
-                break;
-            case 2:
-                winnings = new double[]{0.7, 0.8, 0.9, 0.95, 1.0, 1.1, 1.15, 1.2, 1.25, 1.3};
-                break;
-            case 3:
-                winnings = new double[]{0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.3, 1.4, 1.5, 1.7};
-                break;
-            default:
-                System.out.println("Scelta non valida. Verrà selezionato l'investimento a medio rischio.");
-                winnings = new double[]{0.7, 0.8, 0.9, 0.95, 1.0, 1.1, 1.15, 1.2, 1.25, 1.3};
-        }
-
-        Random rand = new Random();
-        double moneyToInvest;
-
-        System.out.print("Soldi disponibili: ");
-        printBalance();
-        System.out.println("Quanto vuoi investire?");
-        moneyToInvest = scanner.nextDouble();
-        addTransaction("Investimento medio", moneyToInvest, "Investimento a media durata.", new Date());
-
-        if (moneyToInvest > balance) {
-            System.out.println((moneyToInvest - balance) + " euro non sono stati investiti");
-            moneyToInvest = balance;
-            balance = 0;
-        } else {
-            balance -= moneyToInvest;
-        }
-
-        for (int duration = 0; duration < 4; duration++) {
-            int controlInvestiment = rand.nextInt(10);
-            moneyToInvest *= winnings[controlInvestiment];
-            finalResults.add(moneyToInvest);
-        }
-
-        return finalResults;
-    }
-
-    public List<Double> longInvestiment(List<Double> finalResults) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Investimento a lungo termine (10 anni)");
-        System.out.println("Scelta:\n1-Investimento di basso rischio e basso guadagno\n2-Investimento di medio rischio e medio guadagno\n3-Investimento di alto rischio e alto guadagno");
-        int choice = scanner.nextInt();
-
-        double[] winnings;
-        switch (choice) {
-            case 1:
-                winnings = new double[]{0.8, 0.85, 0.9, 0.95, 1.0, 1.1, 1.15, 1.2, 1.25, 1.3};
-                break;
-            case 2:
-                winnings = new double[]{0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.7};
-                break;
-            case 3:
-                winnings = new double[]{0.5, 0.6, 0.7, 0.8, 1.0, 1.2, 1.5, 1.7, 2.0, 2.5};
-                break;
-            default:
-                System.out.println("Scelta non valida. Verrà selezionato l'investimento a medio rischio.");
-                winnings = new double[]{0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.7};
-        }
-
-        Random rand = new Random();
-        double moneyToInvest;
-
-        System.out.print("Soldi disponibili: ");
-        printBalance();
-        System.out.println("Quanto vuoi investire?");
-        moneyToInvest = scanner.nextDouble();
-        addTransaction("Investimento lungo", moneyToInvest, "Investimento a lunga durata.", new Date());
-
-        if (moneyToInvest > balance) {
-            System.out.println((moneyToInvest - balance) + " euro non sono stati investiti");
-            moneyToInvest = balance;
-            balance = 0;
-        } else {
-            balance -= moneyToInvest;
-        }
-
-        for (int duration = 0; duration < 10; duration++) {
-            int controlInvestiment = rand.nextInt(10);
-            moneyToInvest *= winnings[controlInvestiment];
-            finalResults.add(moneyToInvest);
-        }
-
-        return finalResults;
-    }
-
-
     public List<Double> invest() {
         Scanner scanner = new Scanner(System.in);
         List<Double> finalResults = new ArrayList<>();
         System.out.println("1 - Investimento breve durata (12 mesi)\n2 - Investimento media durata (4 anni)\n3 - Investimento lunga durata (10 anni)");
         int choice = scanner.nextInt();
+
         switch (choice) {
             case 1:
-                shortInvestiment(finalResults);
+                handleInvestment(
+                        finalResults,
+                        "Investimento Breve",
+                        "Investimento a breve durata.",
+                        12,
+                        new double[][]{
+                                {0.9, 0.95, 1.0, 1.05, 1.1, 1.1, 1.1, 1.1, 1.15, 1.15},
+                                {0.8, 0.9, 0.95, 1.0, 1.05, 1.1, 1.1, 1.15, 1.2, 1.25},
+                                {0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6}
+                        }
+                );
                 break;
             case 2:
-                mediumInvestiment(finalResults);
+                handleInvestment(
+                        finalResults,
+                        "Investimento Medio",
+                        "Investimento a media durata.",
+                        4,
+                        new double[][]{
+                                {0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.05, 1.1, 1.1, 1.15},
+                                {0.7, 0.8, 0.9, 0.95, 1.0, 1.1, 1.15, 1.2, 1.25, 1.3},
+                                {0.6, 0.7, 0.8, 0.9, 1.0, 1.2, 1.3, 1.4, 1.5, 1.7}
+                        }
+                );
                 break;
             case 3:
-                longInvestiment(finalResults);
+                handleInvestment(
+                        finalResults,
+                        "Investimento Lungo",
+                        "Investimento a lunga durata.",
+                        10,
+                        new double[][]{
+                                {0.8, 0.85, 0.9, 0.95, 1.0, 1.1, 1.15, 1.2, 1.25, 1.3},
+                                {0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.7},
+                                {0.5, 0.6, 0.7, 0.8, 1.0, 1.2, 1.5, 1.7, 2.0, 2.5}
+                        }
+                );
                 break;
             default:
                 System.out.println("Scelta inesistente");
-                invest();
-                break;
+                return invest();
         }
+
         return finalResults;
     }
+
+    private void handleInvestment(List<Double> finalResults, String title, String description, int duration, double[][] riskProfiles) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println(title);
+        System.out.println("Scelta:\n1-Investimento di basso rischio e basso guadagno\n2-Investimento di medio rischio e medio guadagno\n3-Investimento di alto rischio e alto guadagno");
+        int choice = scanner.nextInt();
+
+        double[] winnings;
+        if (choice >= 1 && choice <= 3) {
+            winnings = riskProfiles[choice - 1];
+        } else {
+            System.out.println("Scelta non valida. Verrà selezionato l'investimento a medio rischio.");
+            winnings = riskProfiles[1];
+        }
+
+        System.out.print("Soldi disponibili: ");
+        printBalance();
+        System.out.println("Quanto vuoi investire?");
+        double moneyToInvest = scanner.nextDouble();
+
+        addTransaction(title, moneyToInvest, description, new Date());
+
+        if (moneyToInvest > balance) {
+            System.out.println((moneyToInvest - balance) + " euro non sono stati investiti");
+            moneyToInvest = balance;
+            balance = 0;
+        } else {
+            balance -= moneyToInvest;
+        }
+
+        Random rand = new Random();
+        for (int i = 0; i < duration; i++) {
+            int index = rand.nextInt(10);
+            moneyToInvest *= winnings[index];
+            finalResults.add(moneyToInvest);
+        }
+    }
+
 
     public void JumpMoths(List<Double> investimentsV, int JumpM) {
         wallet += JumpM * 100;

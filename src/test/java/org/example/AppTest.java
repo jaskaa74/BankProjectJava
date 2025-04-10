@@ -1,5 +1,7 @@
 package org.example;
 
+import java.io.ByteArrayInputStream;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -70,6 +72,17 @@ public class AppTest {
     public void testCheckPassword() {
         assertTrue(client.checkPassword("testPassword"));
         assertFalse(client.checkPassword("wrongPassword"));
+    }
+
+    @Test
+    public void testInvestShortTermMediumRisk() {
+        String simulatedInput = "1\n2\n1000\n";
+        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
+        List<Double> results = client.invest();
+        assertEquals(12, results.size());
+        for (double value : results) {
+            assertTrue(value > 0);
+        }
     }
 }
 

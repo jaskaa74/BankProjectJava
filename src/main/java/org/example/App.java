@@ -3,12 +3,6 @@ package org.example;
 import java.util.*;
 
 public class App {
-    public static void waitForSendKey() {
-        System.out.println("\nPremi Invio per tornare al menu principale.");
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-    }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         UserManager userManager = new UserManager();

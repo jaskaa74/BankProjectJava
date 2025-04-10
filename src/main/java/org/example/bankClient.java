@@ -274,8 +274,4 @@ public class bankClient implements Serializable {
             System.out.println(transaction);
         }
     }
-
-    public List<Transaction> getTransactionHistory() {
-        return transactionHistory;
-    }
 }

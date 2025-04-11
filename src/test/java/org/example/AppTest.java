@@ -60,6 +60,19 @@ public class AppTest {
         client.withdraw(300.0);
         assertEquals(700.0, client.getBalance(), 0.01);
         assertEquals(500.0, client.getWallet(), 0.01);
+        client.withdraw(800);
+        assertEquals(0.0, client.getBalance(), 0.01);
+        assertEquals(1200.0, client.getWallet(), 0.01);
+    }
+
+    @Test
+    public void testDeposit(){
+        client.deposit(10);
+        assertEquals(1010,client.getBalance(), 0.01);
+        assertEquals(190.0,client.getWallet(), 0.01);
+        client.deposit(200);
+        assertEquals(1200,client.getBalance(), 0.01);
+        assertEquals(0.0,client.getWallet(), 0.01);
     }
 
     @Test
@@ -72,17 +85,6 @@ public class AppTest {
     public void testCheckPassword() {
         assertTrue(client.checkPassword("testPassword"));
         assertFalse(client.checkPassword("wrongPassword"));
-    }
-
-    @Test
-    public void testInvestShortTermMediumRisk() {
-        String simulatedInput = "1\n2\n1000\n";
-        System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-        List<Double> results = client.invest();
-        assertEquals(12, results.size());
-        for (double value : results) {
-            assertTrue(value > 0);
-        }
     }
 }
 

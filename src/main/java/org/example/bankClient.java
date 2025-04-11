@@ -63,7 +63,7 @@ public class bankClient implements Serializable {
         if (moneyToTake > balance) {
             System.out.println("Soldi prelevati: " + balance + " euro");
             moneyToTake = balance;
-            balance = 0;
+            balance = moneyToTake;
         }
         wallet += moneyToTake;
         balance -= moneyToTake;
